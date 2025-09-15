@@ -3,33 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>可编程电源蓝牙控制器</title>
+    <title>电压模拟器与图像绘制</title>
     <link rel="stylesheet" href="style.css">
+    <!-- 引入Chart.js库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>可编程电源蓝牙控制器</h1>
-        
-        <div class="status-container">
-            <p id="connection-status" class="status-disconnected">未连接</p>
-        </div>
+        <h1>电压模拟器与图像绘制</h1>
         
         <div class="input-container">
-            <label for="voltage-input">电压值 (V):</label>
-            <input type="number" id="voltage-input" min="0" max="30" step="0.1" value="5.0">
+            <label for="functionInput">函数表达式 (使用 t 作为时间变量):</label>
+            <input type="text" id="functionInput" placeholder="例如: 5*sin(t) + 2*cos(2*t)" value="5*sin(t)">
         </div>
         
-        <div class="button-container">
-            <button id="connect-btn">连接电源</button>
-            <button id="send-btn" disabled>发送电压值</button>
+        <div class="input-row">
+            <div class="input-container">
+                <label for="startTime">起始时间 (秒):</label>
+                <input type="number" id="startTime" value="0" step="0.1">
+            </div>
+            
+            <div class="input-container">
+                <label for="endTime">结束时间 (秒):</label>
+                <input type="number" id="endTime" value="10" step="0.1">
+            </div>
+            
+            <div class="input-container">
+                <label for="sampleInterval">采样精度 (秒):</label>
+                <input type="number" id="sampleInterval" value="0.1" step="0.1" min="0.01">
+            </div>
         </div>
         
-        <div class="log-container">
-            <h3>操作日志</h3>
-            <div id="log-output" class="log-output"></div>
+        <button id="generateBtn" class="btn">生成数据并绘制图像</button>
+        <button id="saveBtn" class="btn">保存输入电压数据到1.txt</button>
+        
+        <!-- 图像容器 -->
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <h3>用户输入电压</h3>
+                <canvas id="inputVoltageChart"></canvas>
+            </div>
+            
+            <div class="chart-wrapper">
+                <h3>实际电压 (2.txt)</h3>
+                <canvas id="actualVoltageChart"></canvas>
+            </div>
+            
+            <div class="chart-wrapper">
+                <h3>电压误差 (输入电压 - 实际电压)</h3>
+                <canvas id="errorChart"></canvas>
+            </div>
+        </div>
+        
+        <div id="logContainer" class="log-container">
+            <h3>日志:</h3>
+            <div id="logOutput" class="log-output"></div>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
