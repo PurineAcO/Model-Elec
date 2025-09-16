@@ -334,3 +334,53 @@ function init() {
 
 // 页面加载完成后初始化
 window.addEventListener('load', init);
+
+
+// 添加以下函数来获取和设置函数输入值
+function getFunctionInput() {
+    return document.getElementById('functionInput').innerText;
+}
+
+function setFunctionInput(value) {
+    document.getElementById('functionInput').innerText = value;
+}
+
+// 修改原有的insertMathSymbol函数以适应contenteditable的div
+function insertMathSymbol(symbol) {
+    const input = document.getElementById('functionInput');
+    
+    // 获取当前选区信息
+    const selection = window.getSelection();
+    const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+    
+    if (range) {
+        // 创建包含符号的文本节点
+        const textNode = document.createTextNode(symbol);
+        
+        // 删除选中的文本
+        range.deleteContents();
+        
+        // 插入新的文本节点
+        range.insertNode(textNode);
+        
+        // 移动光标到插入内容之后
+        range.setStartAfter(textNode);
+        range.setEndAfter(textNode);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        // 聚焦回输入框
+        input.focus();
+    } else {
+        // 如果没有选区，直接追加文本
+        input.innerText += symbol;
+        input.focus();
+    }
+}
+
+// 在使用函数输入值的地方，替换为getFunctionInput()
+// 例如，在预览或计算函数值的地方
+function calculateFunction() {
+    const functionStr = getFunctionInput();
+    // 其他计算逻辑...
+}
