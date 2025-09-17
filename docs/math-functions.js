@@ -5,7 +5,6 @@ let realinput=functionInput;
 document.addEventListener('DOMContentLoaded', mathbtninit)
   
 function mathbtninit() {
-    // 为所有输入框添加焦点事件监听器，用于跟踪当前活动输入框
     const allInputs = [functionInput, startTimeInput, endTimeInput, stepInput];
     allInputs.forEach(input => {
         if (input) {
@@ -15,7 +14,6 @@ function mathbtninit() {
         }
     });
 
-    // 为数学按钮添加点击事件监听器
     mathButtons.forEach(button => {
         button.addEventListener('click', () => {
             realinput.focus();
@@ -76,7 +74,13 @@ function Knowhatbutton(buttonid){
     if(btntable[buttonid] && realinput==functionInput){
         insertSymbol(btntable[buttonid].trim(),realinput);
     }
-    else if (btntable[buttonid] && buttonid!='t' && realinput==(startTimeInput|| endTimeInput  || stepInput)){
+    else if (btntable[buttonid] && buttonid!='t' && realinput==startTimeInput){
+        insertSymbol(btntable[buttonid].trim(),realinput);
+    }
+    else if (btntable[buttonid] && buttonid!='t' && realinput==endTimeInput){
+        insertSymbol(btntable[buttonid].trim(),realinput);
+    }
+    else if (btntable[buttonid] && buttonid!='t' && realinput==stepInput){
         insertSymbol(btntable[buttonid].trim(),realinput);
     }
 
