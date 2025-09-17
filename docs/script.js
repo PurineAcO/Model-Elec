@@ -20,8 +20,17 @@ function init() {
     generateBtn.addEventListener('click', handleGenerateBtnClick);
 }
 
-// 计算函数值的安全评估函数
-function calculateFunctionValue(expression, t) {
+
+/**
+ * 计算函数值的安全评估函数
+ * @param {string} expression - 函数表达式
+ * @param {number} t - 时间参数
+ * @param {string} ider - 输入框ID，用于区分不同的输入框
+ * @returns {*} - 计算结果
+ */
+function calculateFunctionValue(expression, t,ider) {
+    
+    if(ider=='functionInput'){
     try {
         let processedExpression = expression
             .replace(/π/g, 'Math.PI')  
@@ -36,6 +45,32 @@ function calculateFunctionValue(expression, t) {
         return safeEval(t, Math);
     } catch (error) {
         throw new Error(`函数表达式计算错误: ${error.message}`);
+    }}
+
+    else if(ider=='startTime' || ider=='endTime' || ider=='step'){
+    try {
+        let processedExpression = expression
+            .replace(/π/g, 'Math.PI')  
+            .replace(/e/g, 'Math.E')   
+            .replace(/\^/g, '**');     
+        
+        const safeEval = new Function('Math', `
+            with(Math) {
+                return ${processedExpression};
+            }
+        `);
+        const result = safeEval(Math);
+        
+        // 确保结果是数字
+        if (isNaN(result) || !isFinite(result)) {
+            throw new Error('表达式计算结果不是有效数字');
+        }
+        
+        return result;
+    } catch (error) {
+        throw new Error(`表达式计算错误: ${error.message}`);
+    }
+
     }
 }
 
@@ -60,7 +95,7 @@ function generateSampleData(expression, startTime, endTime, step) {
     
     // 尝试计算第一个点以验证表达式
     try {
-        calculateFunctionValue(expression, startTime);
+        calculateFunctionValue(expression, startTime,'functionInput');
     } catch (error) {
         throw error;
     }
@@ -68,7 +103,7 @@ function generateSampleData(expression, startTime, endTime, step) {
     // 生成采样点
     for (let t = startTime; t <= endTime; t += step) {
         try {
-            const voltage = calculateFunctionValue(expression, t);
+            const voltage = calculateFunctionValue(expression, t,'functionInput');
             // 确保电压是有效的数字
             if (isNaN(voltage) || !isFinite(voltage)) {
                 throw new Error(`在时间 t=${t.toFixed(2)} 秒时计算得到无效的电压值`);
@@ -107,15 +142,13 @@ function saveDataToFile(dataPoints, filename = '1.txt') {
 // 处理保存按钮点击事件
 function handleSaveBtnClick() {
     try {
+
+
         const expression = functionInput.value.trim();
-        const startTime = parseFloat(startTimeInput.value);
-        const endTime = parseFloat(endTimeInput.value);
-        const step = parseFloat(stepInput.value);
+        const startTime=calculateFunctionValue(startTimeInput.value.trim(),0,'startTime');
+        const endTime=calculateFunctionValue(endTimeInput.value.trim(),0,'endTime');
+        const step=calculateFunctionValue(stepInput.value.trim(),0,'step');
         
-        // 验证输入参数
-        if (isNaN(startTime) || isNaN(endTime) || isNaN(step)) {
-            throw new Error('请输入有效的时间参数');
-        }
         
         // 生成采样数据
         const dataPoints = generateSampleData(expression, startTime, endTime, step);

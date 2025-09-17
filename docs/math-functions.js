@@ -1,23 +1,35 @@
-const mathbtn=document.querySelectorAll('.math-btn');
-const input = document.getElementById('functionInput');
 const mathButtons=document.querySelectorAll('.math-btn');
 
+let realinput=functionInput;
 
 document.addEventListener('DOMContentLoaded', mathbtninit)
   
-function mathbtninit(){
-    mathButtons.forEach(button=>{
+function mathbtninit() {
+    // 为所有输入框添加焦点事件监听器，用于跟踪当前活动输入框
+    const allInputs = [functionInput, startTimeInput, endTimeInput, stepInput];
+    allInputs.forEach(input => {
+        if (input) {
+            input.addEventListener('focus', () => {
+                realinput = input;
+            });
+        }
+    });
+
+    // 为数学按钮添加点击事件监听器
+    mathButtons.forEach(button => {
         button.addEventListener('click', () => {
+            realinput.focus();
             Knowhatbutton(button.id);
         });
-    })
+        
+    });
 }
-
 /**
  * 向函数输入框插入符号
  * @param {string} symbol - 要插入的符号
+ * @param {HTMLInputElement} input - 目标输入框元素
  */
-function insertSymbol(symbol) {
+function insertSymbol(symbol,input) {
     if (!input) {console.log('input不存在');return;}
     const startPos=input.selectionStart;
     const endPos=input.selectionEnd;
@@ -61,8 +73,11 @@ function Knowhatbutton(buttonid){
         'cos':'cos(',
         't':'t',
     }
-    if(btntable[buttonid]){
-        insertSymbol(btntable[buttonid].trim());
+    if(btntable[buttonid] && realinput==functionInput){
+        insertSymbol(btntable[buttonid].trim(),realinput);
     }
-}
+    else if (btntable[buttonid] && buttonid!='t' && realinput==(startTimeInput|| endTimeInput  || stepInput)){
+        insertSymbol(btntable[buttonid].trim(),realinput);
+    }
 
+}
