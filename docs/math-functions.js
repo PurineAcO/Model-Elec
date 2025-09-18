@@ -5,7 +5,7 @@ let realinput=functionInput;
 document.addEventListener('DOMContentLoaded', mathbtninit)
   
 function mathbtninit() {
-    const allInputs = [functionInput, startTimeInput, endTimeInput, stepInput];
+    const allInputs = [functionInput, startTimeInput, endTimeInput, stepInput,loopCountInput];
     allInputs.forEach(input => {
         if (input) {
             input.addEventListener('focus', () => {
@@ -70,18 +70,53 @@ function Knowhatbutton(buttonid){
         'sin':'sin(',
         'cos':'cos(',
         't':'t',
+        'abs':'abs(',
+        'equal':'=',
+        'comma':',',
+        "fenhao":';',
+        "clear":'C',
+        "tan":'tan',
     }
-    if(btntable[buttonid] && realinput==functionInput){
-        insertSymbol(btntable[buttonid].trim(),realinput);
-    }
-    else if (btntable[buttonid] && buttonid!='t' && realinput==startTimeInput){
-        insertSymbol(btntable[buttonid].trim(),realinput);
-    }
-    else if (btntable[buttonid] && buttonid!='t' && realinput==endTimeInput){
-        insertSymbol(btntable[buttonid].trim(),realinput);
-    }
-    else if (btntable[buttonid] && buttonid!='t' && realinput==stepInput){
-        insertSymbol(btntable[buttonid].trim(),realinput);
+    // if(btntable[buttonid] && realinput==functionInput){
+    //     insertSymbol(btntable[buttonid].trim(),realinput);
+    // }
+    // else if (btntable[buttonid] && buttonid!='t' && realinput==startTimeInput){
+    //     insertSymbol(btntable[buttonid].trim(),realinput);
+    // }
+    // else if (btntable[buttonid] && buttonid!='t' && realinput==endTimeInput){
+    //     insertSymbol(btntable[buttonid].trim(),realinput);
+    // }
+    // else if (btntable[buttonid] && buttonid!='t' && realinput==stepInput){
+    //     insertSymbol(btntable[buttonid].trim(),realinput);
+    // }
+    // else if (btntable[buttonid] && buttonid!='t' && realinput==loopCountInput){
+    //     insertSymbol(btntable[buttonid].trim(),realinput);
+    // }
+
+    if (buttonid=='clear'){
+        realinput.value=''
     }
 
+    else if (buttonid=='equal'){
+        realinput.value=calculateFunctionValue(realinput.value,0,'startTime')
+    }
+    
+    else if(realinput==functionInput){
+        if(pointInputCheckbox.checked){
+            if(buttonid!='t'){
+                insertSymbol(btntable[buttonid].trim(),realinput);
+            }
+        }
+        else{
+            if(buttonid!='fenhao' && buttonid!='comma'){
+                insertSymbol(btntable[buttonid].trim(),realinput);
+            }
+        }
+    }
+
+    else if (realinput==startTimeInput || realinput==endTimeInput || realinput==stepInput || realinput==loopCountInput){
+        if(buttonid!='t' && buttonid!='comma' && buttonid!='fenhao'){
+            insertSymbol(btntable[buttonid].trim(),realinput);
+        }
+    }
 }

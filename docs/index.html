@@ -13,7 +13,7 @@
     <body>
         <div class="container">
             <h1>可编程电源客户端</h1>
-            <h2><i>By   Purine AcetylO</i></h2>
+            <!-- <h2><i>By   Purine AcetylO</i></h2> -->
 
             <div class="main-container">
                 <!-- 第一栏 菜单栏 -->
@@ -24,41 +24,51 @@
                 <!-- 第二栏 函数输入 -->
                 <div>
                     <label style="font-size: 20px;">请输入函数表达式:</label>
-                    <p style="color: #666;font-size:16px;margin-bottom: 1px;">仅支持初等函数,请不要省略括号和运算符</p>
-                    <p style="color: #666;font-size:16px;margin-bottom: 1px;">例如: 5*sin(t) + 2*cos(2*t)</p>
-                    <p style="color: #666;font-size:16px;margin-bottom: 1px;">请确保电压函数在定义域有意义</p>
+                    <p id="functionInputword" style="color: #666;font-size:16px;margin-bottom: 1px;">仅支持初等函数,请不要省略括号和运算符,例如: 5*sin(π*t) + sqrt(t)*e^(t)</p>
+                    <p id="pointInputword" style="display: none; color: #666;font-size:16px;margin-bottom: 1px;">使用分号分隔多个点，格式:时间,电压;时间,电压;...</p>
                     <textarea type="text" id="functionInput" placeholder="请输入函数表达式"></textarea>
                     
 
-                    <label style="font-size: 20px;">软键盘</label>
+                    <label style="font-size: 20px;">
+                        软键盘
+                        <input type="checkbox" id="pointInputCheckbox" style="width: 16px; height:16px; margin-left: 20px;">
+                        <span style="font-size: 20px; margin-left: 5px;">描点输入</span>
+                    </label>
                     <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;">
                         <button id="yao" class="math-btn">1</button>
                         <button id="liang" class="math-btn">2</button>
                         <button id="san" class="math-btn">3</button>
                         <button id="plus" class="math-btn">+</button>
-                        <button id="divide" class="math-btn">÷</button>
-                        <button id="power" class="math-btn">^</button>
+                        <button id="minus" class="math-btn">-</button>
+                        <button id="equal" class="math-btn">=</button>
 
                         <button id="si" class="math-btn">4</button>
                         <button id="wu" class="math-btn">5</button>
                         <button id="liu" class="math-btn">6</button>
-                        <button id="minus" class="math-btn">-</button>
                         <button id="multiply" class="math-btn">×</button>
-                        <button id="sqrt" class="math-btn">sqrt</button>
+                        <button id="divide" class="math-btn">÷</button>
+                        <button id="clear" class="math-btn" style="font-family: Arial, Helvetica, sans-serif;font-weight: bold;">C</button>
 
                         <button id="guai" class="math-btn">7</button>
                         <button id="ba" class="math-btn">8</button>
                         <button id="jiu" class="math-btn">9</button>
-                        <button id="pi" class="math-btn" ><i>π</i></button>
-                        <button id="openBracket" class="math-btn">(</button>
-                        <button id="closeBracket" class="math-btn">)</button>
+                        <button id="power" class="math-btn">^</button>
+                        <button id="sqrt" class="math-btn">√</button>
+                        <button id="abs" class="math-btn">abs</button>
 
                         <button id="dong" class="math-btn">0</button>
                         <button id="dot" class="math-btn">.</button>
-                        <button id="t" class="math-btn"><i>t</i></button>
+                        <button id="comma" class="math-btn">,</button>
+                        <button id="fenhao" class="math-btn">;</button>
+                        <button id="openBracket" class="math-btn">(</button>
+                        <button id="closeBracket" class="math-btn">)</button>
+                    
+                        <button id="pi" class="math-btn" ><i>π</i></button>
                         <button id="exp" class="math-btn"><i>e</i></button>
+                        <button id="t" class="math-btn"><i>t</i></button>
                         <button id="sin" class="math-btn">sin</button>
                         <button id="cos" class="math-btn">cos</button>
+                        <button id="tan" class="math-btn">tan</button>
                     </div>
 
                     <div>
@@ -71,20 +81,32 @@
                             <input type="text" id="endTime" placeholder="10">
                         </div>
                         <div class="input-container">
-                            <label style="font-size: 20px;" for="step">采样步长:</label>
+                            <label style="font-size: 20px; display:inline;" for="step">
+                                采样步长:
+                                <input type="checkbox" id="loopCheckbox" style="width: 16px; height:16px;margin-left: 20px;">
+                                <span style="font-size: 20px;">循环</span>
+                            </label>
                             <input type="text" id="step" placeholder="0.1">
+                            <div id="loopCountContainer" style="display: none; margin-top: 10px;">
+                                <label style="font-size: 20px;" for="loopCount">循环次数:</label>
+                                <input type="text" id="loopCount" placeholder="1">
+                            </div>
                         </div>
                     </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+                        <button id="generateBtn" class="btn" style="margin-left: 10px;">在线预览</button>
+                        <button id="reset" class="btn" style="margin-left: 10px;background-color: #dddddd;color: #000000;">重置程序</button>
+                        <button id="saveBtn" class="btn" style="margin-left: 10px;">提交输入</button>
+                        <button id="openbluetooth" class="btn" style="margin-left: 10px;background-color: green;">连接设备</button>
+                    </div>
+
+
                 </div>
                 
                 <!-- 第三栏 按钮和回显 -->
                 <div>
-                    <div style="text-align: center;margin:0 20px;">
-                        <button id="generateBtn" class="btn" style="margin-left: 30px;">在线预览</button>
-                        <button id="saveBtn" class="btn" style="margin-left: 30px;">提交输入</button>
-                        <button id="reset" class="btn" style="margin-left: 30px;background-color: #dddddd;color: #000000;">重置程序</button>
-                        <button id="openbluetooth" class="btn" style="margin-left: 30px;background-color: green;">连接设备</button>
-                    </div>
+                    
 
                     <div class="charts-container">
                         <div class="chart-wrapper">
