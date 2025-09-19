@@ -77,21 +77,6 @@ function Knowhatbutton(buttonid){
         "clear":'C',
         "tan":'tan',
     }
-    // if(btntable[buttonid] && realinput==functionInput){
-    //     insertSymbol(btntable[buttonid].trim(),realinput);
-    // }
-    // else if (btntable[buttonid] && buttonid!='t' && realinput==startTimeInput){
-    //     insertSymbol(btntable[buttonid].trim(),realinput);
-    // }
-    // else if (btntable[buttonid] && buttonid!='t' && realinput==endTimeInput){
-    //     insertSymbol(btntable[buttonid].trim(),realinput);
-    // }
-    // else if (btntable[buttonid] && buttonid!='t' && realinput==stepInput){
-    //     insertSymbol(btntable[buttonid].trim(),realinput);
-    // }
-    // else if (btntable[buttonid] && buttonid!='t' && realinput==loopCountInput){
-    //     insertSymbol(btntable[buttonid].trim(),realinput);
-    // }
 
     if (buttonid=='clear'){
         realinput.value=''
