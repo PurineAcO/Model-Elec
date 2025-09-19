@@ -7,37 +7,58 @@
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <script src="script.js" defer></script>
-        <script src="math-functions.js" defer></script>
+        <!-- <script src="math-functions.js" defer></script> -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
     <body>
-        <h1>可编程电源客户端</h1>
+        
+        <!-- 登录界面 -->
+        <div id="loginContainer" class="login-container" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(236, 245, 254, 0.95); z-index: 1000; justify-content: center; align-items: center;">
+            <div class="login-box" style="background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); width: 400px;">
+                <h2 style="text-align: center; margin-bottom: 30px;">用户登录</h2>
+                <div style="margin-bottom: 20px;">
+                    <label style="font-size: 16px; margin-bottom: 8px; display: block;">用户名</label>
+                    <input type="text" id="loginUsername" placeholder="请输入用户名" style="width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+                </div>
+                <div style="margin-bottom: 30px;">
+                    <label style="font-size: 16px; margin-bottom: 8px; display: block;">用户邮箱</label>
+                    <input type="email" id="loginEmail" placeholder="请输入邮箱" style="width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="checkbox" id="rememberMe" style="width: 16px; height: 16px; vertical-align: middle;">
+                    <span style="font-size: 16px; margin-left: 8px; vertical-align: middle;">下次自动登录</span>
+                </div>
+                <button id="loginBtn" class="btn" style="width: 100%; padding: 12px; font-size: 18px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">确定</button>
+            </div>
+        </div>
+
+        <!-- 显示界面 -->
         <div class="container" style="background-color: #ecf5fe;padding-top: 20px;">
-            
+            <h1>可编程电源客户端</h1>
             <!-- <h2><i>By   Purine AcetylO</i></h2> -->
 
-            <div class="main-container">
+            <div class="main-container" style="display: none;">
                 <!-- 第一栏 菜单栏 -->
                 <div class="byxtbuaaeducn">    
                     <!--本栏全面借鉴 byxt.buaa.edu.cn 喵！-->
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" id="workbenchbtn">
                         <span class="fas fa-desktop sidebar-icon"></span>
                         <span class="sidebar-text">工作区</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" id="historybtn">
                         <span class="fas fa-history sidebar-icon"></span>       
                         <span class="sidebar-text">历史记录</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" id="devicebtn">
                         <span class="fas fa-microchip sidebar-icon"></span>
-                        <span class="sidebar-text">我的设备</span>
+                        <span class="sidebar-text" style="text-decoration:line-through;">我的设备</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" id="userbtn">
                         <span class="fas fa-user sidebar-icon"></span>
                         <span class="sidebar-text">用户信息</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" id="KSRB">
                         <span class="fas fa-home sidebar-icon"></span>
                         <span class="sidebar-text">知春饭桶主页</span>
                     </div>
@@ -45,7 +66,7 @@
 
 
                 <!-- 第二栏 函数输入 -->
-                <div>
+                <div id="column2-1">
                     <div class="calculater">
                         <label style="font-size: 20px;margin-left: 8px;margin-top: 8px;">请输入函数表达式:</label>
                         <p id="functionInputword" style="color: #666;font-size:16px;margin-bottom: 1px;margin-left: 8px;margin-top: 5px;">仅支持初等函数,请不要省略括号和运算符,例如: 5*sin(π*t) + sqrt(t)*e^(t)</p>
@@ -117,20 +138,46 @@
                             </div>
                         </div>
 
-                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr;margin-top: 10px;margin-bottom: 16px;margin-left: 8px;width:calc(100% - 16px);gap:8px">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr;margin-top: 10px;margin-bottom: 16px;margin-left: 8px;width:calc(100% - 16px);gap:8px">
                             <button id="generateBtn" class="btn" >预览</button>
                             <button id="saveBtn" class="btn" >提交</button>
                             <button id="reset" class="btn" style="background-color: #dddddd;color: #000000;">重置</button>
-                            <button id="openbluetooth" class="btn" style="background-color: green;">连接</button>
                         </div>
 
                     </div>
                 </div>
-                
-                <!-- 第三栏 按钮和回显 -->
-                <div>
-                    
 
+                <!-- 备选第二栏 设备信息会触发 -->
+                <div id="column2-3" style="display: none;">
+                    <div class="calculater" style="display: flex; flex-direction: column; align-items: center;gap: 20px;">
+                        <label id="devicename" style="font-size: 20px;margin-top: 20px">设备名称:</label>
+                        <button id="connectit" class="btn" style="background-color: #d2ffda;color: #000000;margin-bottom: 30px;">TODO</button>
+                    </div>
+                </div>
+
+                <!-- 备选第二栏 用户信息会触发 -->
+                <div id="column2-4" style="display: none;">
+                    <div class="calculater" style="display: flex; flex-direction: column; align-items: center;gap: 20px;">
+                        <label id="username" style="font-size: 20px;margin-top: 20px">用户名:</label>
+                        <label id="useremail" style="font-size: 20px;margin-top: 20px">用户邮箱:</label>
+                        <label id="lastlogintime" style="font-size: 20px;margin-top: 20px">上次登录时间:</label>
+                        <p style="font-size: 16px;color: #000000;">退出登录前,请确认实验数据已保存好</p>
+                        <button id="logoutBtn" class="btn" style="background-color: #ffd2d2;color: #000000;margin-bottom: 30px;">退出登录</button>
+                    </div>
+                </div>
+
+
+                <!-- 备选第二栏 知春饭桶主页会触发 -->
+                <div id="column2-5" style="display: none;">
+                    <div class="calculater" style="display: flex; flex-direction: column; align-items: center;">
+                        <img src="KSRBer.png" style="max-width: 80%; height: auto;margin-top: 20px;">
+                        <button id="togithub" class="btn" style="margin-top: 30px;margin-bottom: 15px;width:200px">转到 Github</button>
+                        <button id="tosource" class="btn" style="margin-bottom: 30px;width: 200px;">查看项目源码</button>
+                    </div>
+                </div>
+                
+                <!-- 第三栏 回显 -->
+                <div id="column3">
                     <div class="charts-container">
                         <div class="chart-wrapper">
                             <h3>输入电压</h3>
@@ -149,6 +196,18 @@
                     </div>
                 </div>
 
+                <!-- 巨大的历史记录 -->
+                <div id="historyContainer" style="display: none;" class="historyer">
+                    <h1 style="margin-left: 10px;margin-top: 10px;">历史记录</h1>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr;margin-top: 10px;margin-bottom: 16px;margin-left: 8px;width:calc(100% - 16px);gap:8px;justify-items: center;">
+                        <button id="clearlog" class="btn" style="width: 140px;height: 55px;" >清空</button>
+                        <button id="rememberlog" class="btn" style="width: 140px;height: 55px;" >加载</button>
+                        <button id="savelog" class="btn" style="width: 140px;height: 55px;" >导出</button>
+                        <button id="uploadlog" class="btn" style="width: 140px;height: 55px;" >导入</button>
+                    </div>
+
+                    <div id="logOutput" style="margin-left: 10px;"></div>
+                </div>
 
             </div>
         </div>
