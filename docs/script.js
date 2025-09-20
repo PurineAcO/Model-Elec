@@ -948,6 +948,7 @@ async function handlesaveBtnClick() {
         const actualVoltageData = await readActualVoltageData();
         
         // 绘制图表
+        drawInputVoltageChart(dataPoints);
         drawActualVoltageChart(dataPoints);
         drawErrorChart(dataPoints);
         
